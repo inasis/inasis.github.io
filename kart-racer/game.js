@@ -249,6 +249,7 @@ const CAR_SCALE = 0.8;
 async function loadCarAsset(filename) {
   const gltf = await loader.loadAsync(`./assets/cars/${filename}`);
   const root = gltf.scene;
+  root.rotation.y = MODEL_YAW;
   root.traverse((obj) => {
     if (obj.isMesh) {
       obj.castShadow = true;
