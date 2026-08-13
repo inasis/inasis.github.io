@@ -249,7 +249,6 @@ const CAR_SCALE = 0.8;
 async function loadCarAsset(filename) {
   const gltf = await loader.loadAsync(`./assets/cars/${filename}`);
   const root = gltf.scene;
-  root.rotation.y = MODEL_YAW;
   root.traverse((obj) => {
     if (obj.isMesh) {
       obj.castShadow = true;
@@ -279,8 +278,8 @@ async function makeCar(filename, fallbackColor) {
     console.warn(`Failed to load ${filename}; using fallback.`, err);
     model = fallbackKart(fallbackColor);
   }
-  model.rotation.y = MODEL_YAW;
-  model.scale.setScalar(CAR_SCALE);
+  model.rotation.y = 0;
+  model.scale.set(CAR_SCALE, CAR_SCALE, -CAR_SCALE);
   group.add(model);
   scene.add(group);
   return group;
