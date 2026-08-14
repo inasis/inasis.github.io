@@ -278,8 +278,8 @@ async function makeCar(filename, fallbackColor) {
     console.warn(`Failed to load ${filename}; using fallback.`, err);
     model = fallbackKart(fallbackColor);
   }
-  model.rotation.y = 0;
-  model.scale.set(CAR_SCALE, CAR_SCALE, -CAR_SCALE);
+  model.rotation.y = MODEL_YAW;
+  model.scale.set(CAR_SCALE, CAR_SCALE, CAR_SCALE);
   group.add(model);
   scene.add(group);
   return group;
