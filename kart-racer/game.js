@@ -243,7 +243,7 @@ function signedTurn(distance, look = 36) {
 // GLB cars
 // -----------------------------------------------------------------------------
 const loader = new GLTFLoader();
-const MODEL_YAW = Math.PI; // Cosmo models face the opposite local Z direction.
+const MODEL_YAW = 0; // Car models use the same +Z forward direction as the driving code.
 const CAR_SCALE = 0.8;
 
 async function loadCarAsset(filename) {
@@ -623,6 +623,7 @@ function updateLap(index, dot) {
 // AI: learned line/speed/drift + avoidance + drift state machine.
 // -----------------------------------------------------------------------------
 const aiNames = ['RED', 'GOLD', 'VIOLET', 'GREEN', 'PINK'];
+const AI_MAX_SPEED = 180;
 const ai = aiCars.map((group, i) => ({
   name: aiNames[i],
   group,
@@ -738,33 +739,9 @@ function updateAI(dt, time) {
     chooseAILane(car);
     updateAIDrift(car, dt);
 
-    const data = learnedAt(car.distance + 20);
-    const learn = Math.min(0.86, learnedLaps * 0.15) * car.skill * data.confidence;
     car.lane += (car.desiredLane - car.lane) * Math.min(1, dt * (car.driftState === FULL ? 1.2 : 2.2));
 
-    const turn = Math.abs(signedTurn(car.distance, 34));
-    let desired = car.baseSpeed * THREE.MathUtils.clamp(1 - turn / 1.08, 0.5, 1);
-
-    if (data.confidence > 0) {
-      const learnedSpeed = THREE.MathUtils.clamp(data.speed * (1.015 + 0.025 * car.skill), 75, 180);
-      desired = THREE.MathUtils.lerp(desired, learnedSpeed, learn);
-    }
-
-    if (car.driftState === FULL) desired -= 16 + 18 * car.driftCharge;
-    if (car.driftState === SHORT) desired -= 5;
-
-    for (const other of ai) {
-      if (other === car) continue;
-      const g = signedTrackGap(car.distance, other.distance);
-      if (g > 0 && g < 18 && Math.abs(other.lane - car.lane) < 2.8) {
-        desired = Math.min(desired, other.speed + (g - 6) * 2);
-      }
-    }
-
-    const pg = signedTrackGap(car.distance, progressAtPosition(playerCar.position, playerLap));
-    if (pg > 0 && pg < 18) desired = Math.min(desired, Math.max(65, speed) + (pg - 6) * 2);
-
-    desired = THREE.MathUtils.clamp(desired + Math.sin(time * 0.0006 + car.phase) * 2.2, 72, 180);
+    const desired = AI_MAX_SPEED;
     const accel = desired > car.speed ? 30 : 62;
     car.speed += THREE.MathUtils.clamp(desired - car.speed, -accel * dt, accel * dt);
     car.distance += car.speed / 3.6 * dt;
