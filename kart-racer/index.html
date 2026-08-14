@@ -38,18 +38,19 @@
     #speedHud { position:absolute; z-index:20; left:50%; bottom:max(16px,env(safe-area-inset-bottom)); transform:translateX(-50%); text-align:center; pointer-events:none; text-shadow:0 2px 6px rgba(0,0,0,.7); }
     #speed { font-size:clamp(38px,8vw,64px); line-height:.9; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-2px; }
     #speedUnit { margin-top:4px; font-size:12px; font-weight:650; }
-    #steerControls { position:absolute; z-index:30; left:max(14px,env(safe-area-inset-left)); bottom:max(14px,env(safe-area-inset-bottom)); display:flex; gap:10px; }
+    #steerControls { position:absolute; z-index:30; left:max(14px,env(safe-area-inset-left)); bottom:max(90px,env(safe-area-inset-bottom) + 90px); display:flex; gap:10px; }
     #actionControls { position:absolute; z-index:30; right:max(14px,env(safe-area-inset-right)); bottom:max(12px,env(safe-area-inset-bottom)); display:flex; flex-direction:column; align-items:center; gap:8px; }
     .round { border:1px solid var(--border); background:var(--panel-2); display:flex; align-items:center; justify-content:center; box-shadow:0 3px 12px rgba(0,0,0,.24); }
     .round:active, .round.pressed { transform:scale(.94); filter:brightness(1.15); }
-    .steer { width:64px; height:64px; border-radius:50%; font-size:27px; font-weight:800; }
+    .steer { width:clamp(72px,17vw,88px); height:clamp(72px,17vw,88px); border-radius:0; clip-path:polygon(0 0,100% 50%,0 100%); font-size:0; font-weight:800; }
+    #leftBtn { clip-path:polygon(100% 0,0 50%,100% 100%); }
+    #rightBtn { clip-path:polygon(0 0,100% 50%,0 100%); }
     #driftBtn { width:80px; height:80px; border-radius:50%; background:var(--accent); font-size:13px; font-weight:800; }
     #brakeBtn { width:46px; height:46px; border-radius:50%; }
     #brakeBtn svg { width:25px; height:25px; }
     #tip { position:absolute; z-index:15; left:50%; bottom:88px; transform:translateX(-50%); font-size:10px; opacity:.7; white-space:nowrap; pointer-events:none; text-shadow:0 1px 3px #000; }
     @media (max-width:520px) {
       #rankBox { width:102px; font-size:11px; }
-      .steer { width:60px; height:60px; }
       #driftBtn { width:74px; height:74px; }
       #tip { display:none; }
     }
@@ -78,8 +79,8 @@
     </section>
 
     <div id="steerControls">
-      <button id="leftBtn" type="button" class="round steer" aria-label="왼쪽 조향">←</button>
-      <button id="rightBtn" type="button" class="round steer" aria-label="오른쪽 조향">→</button>
+      <button id="leftBtn" type="button" class="round steer" aria-label="왼쪽 조향"></button>
+      <button id="rightBtn" type="button" class="round steer" aria-label="오른쪽 조향"></button>
     </div>
 
     <div id="actionControls">
